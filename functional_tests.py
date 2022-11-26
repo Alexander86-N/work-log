@@ -1,7 +1,36 @@
 from selenium import webdriver
+import unittest
 
 
-browser = webdriver.Firefox()
-browser.get("http://localhost:8000")
+class NewVisitorTest(unittest.TestCase):
+    """ Тест нового посетителя. """
 
-assert "Congratulations" in browser.title
+    def setUp(self):
+        """ Установка. """
+        self.browser = webdriver.Firefox()
+
+    def tearDown(self):
+        """ Демонтаж. """
+        self.browser.quit()
+
+    def test_can_start_a_list_and_retrieve_it_later(self):
+        """ Тест может начать список и получить его позже. """
+        self.browser.get("http://localhost:8000")
+        # Страница имеет заголовок 
+        self.assertIn("Рабочий журнал", self.browser.title)
+        self.fail("Закончить тест!")
+        # Сотруднику предлагается ввести проделаную работу
+        # Он набирает в текстовом поле "Кювета(синяя)-1980 шт."
+        # Когда он нажимает 'ENTER', страница обновляется, и теперь содержит
+        # "1: Кювета(синяя)-1980 шт." в качестве элемента списка
+        # Текстовое поле предлагает записать ещё работу
+        # Он вводит "Шпатель гладкий(оранж)-1700 шт."
+        # Страница снова обнавляется, и теперь показывает оба элемента списка
+        # Сотруднику интересно. запомнит ли сайт записаную работу. Он видит. что
+        # сайт сгенерировал для нго уникальный URL-адрес - об этом
+        # выводится небольшое текстовое сообщение
+        # Он посещает этот URL-адрес - записаная работа там
+        # Довольный он ваходит из приложения
+
+if __name__ == '__main__':
+    unittest.main(warnings='ignore')
