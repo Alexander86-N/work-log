@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ru">  
+    <head>
+        <meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>Рабочий журнал</title>
+    </head>
+    <body class="d-flex flex-column min-vh-100">
+	<nav class="navbar navbar-expand-lg navbar-light bg-light mb-3">
+	    <a class="navbar-brand" href="{% url 'home_page' %}">Журнал</a>
+	    <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarToggleExternalContent">
+	        <span class="navbar-toggler-icon"></span>
+	    </button>
+	    <div class="collapse navbar-collapse" id="navbarToggleExternalContent">
+	        <ul class="navbar-nav mr-auto">
+		    {% if request.user.is_authenticated %}
+		    <li class="nav-item">
+		        <a class="nav-link" href="{% url 'list_of_users' %}">Сотрудники</a>
+		    </li>
+		    <li class="nav-item">
+		        <a class="nav-link" href="{% url 'list_of_statuses' %}">Статус</a>
+		    </li>
+		    <li class="nav-item">
+		        <a class="nav-link" href="{% url 'list_of_labels' %}">Метки</a>
+		    </li>
+		    <li class="nav-item">
+		        <a class="nav-link" href="{% url 'list_of_tasks' %}">Задачи</a>
+		    </li>
+		    {% else %}
+		    <li class="nav-item">
+		        <a class="nav-link" href="{% url 'list_of_users' %}">Сотрудники</a>
+		    </li>
+		    {% endif %}
+	        </ul>
+	        <ul class="navbar-nav">
+		    {% if request.user.is_authenticated %}
+		    <li class="nav-item">
+		        <a class="nav-link" href="{% url 'logout' %}">Выход</a>
+		    </li> 
+		    <li class="nav-item">
+		        <a class="nav-link" href="{% url 'login' %}">Вход</a>
+		    </li>
+		    <li class="nav-item"> 
+		        <a class="nav-link" href="{% url 'sign_up' %}">Регистрация</a>
+		    </li>
+		    {% endif %}
+	        </ul>
+	    </div>
+        </nav>
+	<div class="container">
+	    {# {% bootstrap_messages %}#}
+	</div>#}
+	<div class="container flex-grow-1">
+	    {% block content %}	    
+	    {% endblock %}
+	</div>
+    </body>
+</html>
