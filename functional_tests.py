@@ -3,20 +3,20 @@ import unittest
 
 
 class NewVisitorTest(unittest.TestCase):
-    """ Тест нового посетителя. """
+    """Тест нового посетителя."""
 
     def setUp(self):
-        """ Установка. """
+        """Установка."""
         self.browser = webdriver.Firefox()
 
     def tearDown(self):
-        """ Демонтаж. """
+        """Демонтаж."""
         self.browser.quit()
 
     def test_can_start_a_list_and_retrieve_it_later(self):
-        """ Тест может начать список и получить его позже. """
+        """Тест может начать список и получить его позже."""
         self.browser.get("http://localhost:8000")
-        # Страница имеет заголовок 
+        # Страница имеет заголовок
         self.assertIn("Рабочий журнал", self.browser.title)
         self.fail("Закончить тест!")
         # Сотруднику предлагается ввести проделаную работу
@@ -32,5 +32,6 @@ class NewVisitorTest(unittest.TestCase):
         # Он посещает этот URL-адрес - записаная работа там
         # Довольный он ваходит из приложения
 
-if __name__ == '__main__':
-    unittest.main(warnings='ignore')
+
+if __name__ == "__main__":
+    unittest.main(warnings="ignore")
