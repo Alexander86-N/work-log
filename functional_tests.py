@@ -33,19 +33,26 @@ class NewVisitorTest(unittest.TestCase):
         inputbox.send_keys(Keys.ENTER)
         time.sleep(1)
         # "1: Кювета(синяя)-1980 шт." в качестве элемента списка
-        table = self.browser.find_element(By.ID, "id_list_table")
-        rows = table.find_elements(By.TAG_NAME, "tr")
-        self.assertTrue(
-            any(row.text == "1: Кювета(синяя)-1980 шт." for row in rows),
-            "Новый элемент списка не появился в таблице"
-        )
+#        table = self.browser.find_element(By.ID, "id_list_table")
+#        rows = table.find_elements(By.TAG_NAME, "tr")
+#        self.assertIn("1: Кювета(синяя)-1980 шт.", [row.text for row in rows])
+
         # Текстовое поле предлагает записать ещё работу
         # Он вводит "Шпатель гладкий(оранж)-1700 шт."
-        self.fail("Закончить тест!")
+        inputbox = self.browser.find_element(By.ID, "id_new_item")
+        inputbox.send_keys("Шпатель гладкий(оранж)-1700 шт.")
+        inputbox.send_keys(Keys.ENTER)
+        time.sleep(1)
+        table = self.browser.find_element(By.ID, "id_list_table")
+        rows = table.find_elements(By.TAG_NAME, "tr")
+        self.assertIn("1: Кювета(синяя)-1980 шт.", [row.text for row in rows])
+        self.assertIn("2: Шпатель гладкий(оранж)-1700 шт.",
+                      [row.text for row in rows])
         # Страница снова обнавляется, и теперь показывает оба элемента списка
         # Сотруднику интересно. запомнит ли сайт записаную работу. Он видит. что
         # сайт сгенерировал для нго уникальный URL-адрес - об этом
         # выводится небольшое текстовое сообщение
+        self.fail("Закончить тест!")
         # Он посещает этот URL-адрес - записаная работа там
         # Довольный он ваходит из приложения
 
