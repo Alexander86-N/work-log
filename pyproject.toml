@@ -10,6 +10,7 @@ packages = [{include = "work_log"}]
 python = "^3.8"
 Django = "^4.1.3"
 selenium = "^4.6.0"
+python-dotenv = "^0.21.0"
 
 
 [build-system]
