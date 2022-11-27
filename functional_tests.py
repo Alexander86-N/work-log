@@ -25,7 +25,7 @@ class NewVisitorTest(unittest.TestCase):
         self.assertIn("Рабочий журнал", header_text)
         # Сотруднику предлагается ввести проделаную работу
         inputbox = self.browser.find_element(By.ID, "id_new_item")
-        self.assertEqual(inputbox.get_attibute("placeholder"),
+        self.assertEqual(inputbox.get_attribute("placeholder"),
                          "Записать результаты")
         # Он набирает в текстовом поле "Кювета(синяя)-1980 шт."
         inputbox.send_keys("Кювета(синяя)-1980 шт.")
@@ -34,8 +34,11 @@ class NewVisitorTest(unittest.TestCase):
         time.sleep(1)
         # "1: Кювета(синяя)-1980 шт." в качестве элемента списка
         table = self.browser.find_element(By.ID, "id_list_table")
-        row = table.find_elements(By.TAG_NAME, "tr")
-        self.assertTrue(any(row.text == "1: Кювета(синяя)-1980 шт."))
+        rows = table.find_elements(By.TAG_NAME, "tr")
+        self.assertTrue(
+            any(row.text == "1: Кювета(синяя)-1980 шт." for row in rows),
+            "Новый элемент списка не появился в таблице"
+        )
         # Текстовое поле предлагает записать ещё работу
         # Он вводит "Шпатель гладкий(оранж)-1700 шт."
         self.fail("Закончить тест!")
