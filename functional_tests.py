@@ -16,6 +16,12 @@ class NewVisitorTest(unittest.TestCase):
         """Демонтаж."""
         self.browser.quit()
 
+    def check_for_row_in_list_table(self, row_text):
+        """ подтверждение строки в таблице списка """
+        table = self.browser.find_element(By.ID, "id_list_table")
+        rows = table.find_elements(By.TAG_NAME, "tr")
+        self.assertIn(row_text, [row.text for row in rows])
+
     def test_can_start_a_list_and_retrieve_it_later(self):
         """Тест может начать список и получить его позже."""
         self.browser.get("http://localhost:8000")
@@ -32,10 +38,7 @@ class NewVisitorTest(unittest.TestCase):
         # Когда он нажимает 'ENTER', страница обновляется, и теперь содержит
         inputbox.send_keys(Keys.ENTER)
         time.sleep(1)
-        # "1: Кювета(синяя)-1980 шт." в качестве элемента списка
-#        table = self.browser.find_element(By.ID, "id_list_table")
-#        rows = table.find_elements(By.TAG_NAME, "tr")
-#        self.assertIn("1: Кювета(синяя)-1980 шт.", [row.text for row in rows])
+        self.check_for_row_in_list_table("1: Кювета(синяя)-1980 шт.")
 
         # Текстовое поле предлагает записать ещё работу
         # Он вводит "Шпатель гладкий(оранж)-1700 шт."
@@ -43,11 +46,9 @@ class NewVisitorTest(unittest.TestCase):
         inputbox.send_keys("Шпатель гладкий(оранж)-1700 шт.")
         inputbox.send_keys(Keys.ENTER)
         time.sleep(1)
-        table = self.browser.find_element(By.ID, "id_list_table")
-        rows = table.find_elements(By.TAG_NAME, "tr")
-        self.assertIn("1: Кювета(синяя)-1980 шт.", [row.text for row in rows])
-        self.assertIn("2: Шпатель гладкий(оранж)-1700 шт.",
-                      [row.text for row in rows])
+        
+        self.check_for_row_in_list_table("1: Кювета(синяя)-1980 шт.")
+        self.check_for_row_in_list_table("2: Шпатель гладкий(оранж)-1700 шт.")
         # Страница снова обнавляется, и теперь показывает оба элемента списка
         # Сотруднику интересно. запомнит ли сайт записаную работу. Он видит. что
         # сайт сгенерировал для нго уникальный URL-адрес - об этом
