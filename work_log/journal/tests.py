@@ -17,15 +17,19 @@ class HomePageTest(TestCase):
 
     def test_can_save_a_POST_request(self):
         """ Тест: можно сохранить post-запрос. """
-        response = self.client.post(
-            "/", 
-            data={"item_text": "Я ничего не делал"}
-        )
+        self.client.post("/",  data={"item_text": "Я ничего не делал"})
         self.assertEqual(Item.objects.count(), 1)
         new_item = Item.objects.first()
         self.assertEqual(new_item.text, "Я ничего не делал")
-        self.assertIn("Я ничего не делал", response.content.decode())
-        self.assertTemplateUsed(response, 'index.html')
+
+    def test_redirects_after_POST(self):
+        """ Тест: переадресует после post-запроса. """
+        response = self.client.post(
+            "/",
+            data={"item_text": "Я ничего не делал"}
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response["location"], "/")
 
 
 class RecordModelTest(TestCase):
