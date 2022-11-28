@@ -10,12 +10,20 @@ class HomePageTest(TestCase):
         response = self.client.get("/")
         self.assertTemplateUsed(response, 'index.html')
 
-    def test_can_save_POST_request(self):
+    def test_only_saves_items_when_necessary(self):
+        """ Тест: сохраняет элемент, только когда нужно. """
+        response = self.client.get("/")
+        self.assertEqual(Item.objects.count(), 0)
+
+    def test_can_save_a_POST_request(self):
         """ Тест: можно сохранить post-запрос. """
         response = self.client.post(
             "/", 
             data={"item_text": "Я ничего не делал"}
         )
+        self.assertEqual(Item.objects.count(), 1)
+        new_item = Item.objects.first()
+        self.assertEqual(new_item.text, "Я ничего не делал")
         self.assertIn("Я ничего не делал", response.content.decode())
         self.assertTemplateUsed(response, 'index.html')
 
