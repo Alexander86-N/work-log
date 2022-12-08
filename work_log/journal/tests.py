@@ -29,15 +29,7 @@ class HomePageTest(TestCase):
             data={"item_text": "Я ничего не делал"}
         )
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(response["location"], "/")
-
-    def test_display_all_list_items(self):
-        """ Тест: отображаются все элементы списка. """
-        Item.objects.create(text="Элемент 1")
-        Item.objects.create(text="Элемент 2")
-        response = self.client.get('/')
-        self.assertIn("Элемент 1", response.content.decode())
-        self.assertIn("Элемент 2", response.content.decode())
+        self.assertEqual(response["location"], "/lists/new_url")
 
 
 class RecordModelTest(TestCase):
@@ -60,3 +52,22 @@ class RecordModelTest(TestCase):
         second_saved_item = saved_items[1]
         self.assertEqual(first_saved_item.text, "Я сделал то-то...")
         self.assertEqual(second_saved_item.text, "Что-то делал ...")
+
+
+class ListViewTest(TestCase):
+    """ Тест представления списка """
+
+    def test_uses_list_template(self):
+        """ Тест: использование шаблона списка. """
+        response = self.client.get("/lists/new_url/")
+        self.assertTemplateUsed(response, "list.html")
+
+    def test_displays_all_items(self):
+        """ Тест: отображаются все элементы списка. """
+        Item.objects.create(text="Элемент 1")
+        Item.objects.create(text="Элемент 2")
+
+        response = self.client.get('/lists/new_url/')
+
+        self.assertContains(response, "Элемент 1")
+        self.assertContains(response, "Элемент 2")
