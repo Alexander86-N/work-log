@@ -10,27 +10,6 @@ class HomePageTest(TestCase):
         response = self.client.get("/")
         self.assertTemplateUsed(response, 'index.html')
 
-    def test_only_saves_items_when_necessary(self):
-        """ Тест: сохраняет элемент, только когда нужно. """
-        response = self.client.get("/")
-        self.assertEqual(Item.objects.count(), 0)
-
-    def test_can_save_a_POST_request(self):
-        """ Тест: можно сохранить post-запрос. """
-        self.client.post("/",  data={"item_text": "Я ничего не делал"})
-        self.assertEqual(Item.objects.count(), 1)
-        new_item = Item.objects.first()
-        self.assertEqual(new_item.text, "Я ничего не делал")
-
-    def test_redirects_after_POST(self):
-        """ Тест: переадресует после post-запроса. """
-        response = self.client.post(
-            "/",
-            data={"item_text": "Я ничего не делал"}
-        )
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(response["location"], "/lists/new_url")
-
 
 class RecordModelTest(TestCase):
     """ Тест модели элемента записи. """
@@ -71,3 +50,21 @@ class ListViewTest(TestCase):
 
         self.assertContains(response, "Элемент 1")
         self.assertContains(response, "Элемент 2")
+
+
+class NewListTest(TestCase):
+    """ Тест нового списка. """
+
+    def test_can_save_a_POST_request(self):
+        """ Тест: можно сохранить post-запрос. """
+        self.client.post("/lists/new",  
+                         data={"item_text": "Я первый раз записываюсь."})
+        self.assertEqual(Item.objects.count(), 1)
+        new_item = Item.objects.first()
+        self.assertEqual(new_item.text, "Я первый раз записываюсь.")
+
+    def test_redirects_after_POST(self):
+        """ Тест: переадресует после post-запроса. """
+        response = self.client.post("/lists/new",
+                                    data={"item_text": "Я ничего не делал"})
+        self.assertRedirects(response, "/lists/new_url/")
